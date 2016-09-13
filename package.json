@@ -1,0 +1,13 @@
+{
+   "name": "mud_mysql",
+   "version": "0.0.1",
+   "engines": {
+     "node": "6.2.1"
+    },
+   "dependencies": {
+     "express": "^4.13.4",
+     "body-parser": "1.15.2",
+     "mysql": "^2.10.2",
+     "ejs": "^1.0.0"
+   }
+ }

@@ -1,0 +1,168 @@
+@media screen and (min-width: 0px) and (max-width: 768px) {
+  div {
+      background-color: lightgreen;
+  }
+  .show-hide-small{
+    display: inline-block !important;
+  }
+  .show-hide-large{
+    display: none !important;
+  }
+
+  #smallRoomImageBox{
+    margin: auto;
+  }
+  #smallToyBox {
+    margin-left: 10px;
+    width: 500px;
+  }
+  #smallTextBox {
+    margin: auto;
+    width: 85%;
+  }
+
+  .roomImage {
+    width: 330px;
+    border: 2px solid pink;
+  }
+
+  .toy {
+    display: inline-block;
+    width: 55px;
+    margin: 1px;
+    border: 1.5px dotted blue;
+  }
+
+  .exitList{
+    float: right;
+  }
+
+  .playerControls {
+    margin-left: 200px;
+    margin-top: -50px;
+    float: right;
+  }
+  .playerControls input{
+    margin: 2px;
+  }
+
+  .container {
+    border: 3px solid black;
+
+  }
+
+.view-box{
+    border: 3px solid black;
+    width: 50px;
+    height: 50px;
+}
+
+.item-box-text{
+  margin-left: 50%;
+  }
+
+.item-box-image{
+  margin-left: 50%;
+}
+
+.playerControls {
+  margin-top: 10%;
+}
+
+  #item-image{
+    height: 50%;
+    width: 50%;
+  }
+
+  #itemAndInput {
+    border: 1px solid black;
+    width: 50%;
+    display: inline-block;
+    margin-left:50%;
+  }
+
+}
+
+@media screen and (min-width: 768px) and (max-width: 1500px) {
+    .show-hide-small{
+      display:none !important;
+      background-color: purple;
+    }
+    .show-hide-large{
+      display: inline-block !important;
+    }
+    div {
+      background-color: none;
+    }
+
+    #largeRoomImageBox{
+      width: 40%;
+    }
+
+    #largeToyBox {
+      width: 10%;
+    }
+
+    .roomTextBox{
+      margin-top: -40%;
+    }
+
+    #largeTextBox {
+      width: 40%;
+      padding: 15px;
+      vertical-align: middle;
+    }
+    .roomImage {
+      width: 100%;
+      height: 100%;
+      margin-top: -60%;
+    }
+
+    .toy{
+      width: 75%;
+      border: 1.5px dotted blue;
+
+    }
+    #roomLong {
+      width: 100%;
+    }
+
+    #room-box{
+    }
+
+    .exitList{
+      display: inline-block;
+      width: 40%;
+    }
+
+    .playerControls {
+      display: inline-block;
+    }
+    .playerControls input{
+      margin: 2px;
+    }
+
+    .container {
+      /*border: 3px solid black;*/
+    }
+
+
+  .item-box-text{
+  }
+
+  .item-box-image{
+  }
+
+  #item-image{
+    height: 25%;
+    width: 25%;
+  }
+
+  #itemAndInput {
+    width: 20%;
+    display: block;
+    margin-left:70%;
+    margin-top: -20%;
+  }
+
+}
