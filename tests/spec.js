@@ -12,12 +12,19 @@ describe('find the rooms/0 page', function() {
     toEqual('');
   });
 
-  it('should send [poke fish] into the inputBox and respond [Poke what?]', function() {
-    element(by.id('primaryInputBox')).sendKeys('poke fish');
-    expect(element(by.binding('gameMessage')).getText()).
-    toEqual('Poke what?');
+  it('should send [poke it] into the inputBox and respond [Poke what?]', function() {
+    var el = element(by.id('primaryInputBox'))
+    var submit = element(by.id('submit'))
+    var output = element(by.id('gameMessage'))
+    el.click();
+    el.sendKeys("poke it");
+
+    browser.wait(function() {
+      return element(by.binding('gameMessage')).isPresent();
+    }, 50000);
+
+    submit.click();
+    expect(output.getAttribute('innerHTML')).toEqual(' I don\'t detect ...it?');
+
   })
 });
-// element(by.model('yourName')).sendKeys('Julie');
-// var greeting = element(by.binding('yourName'));
-// expect(greeting.getText()).toEqual('Hello Julie!');
