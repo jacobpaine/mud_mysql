@@ -81,6 +81,7 @@ angular.module("contactsApp", ['ngRoute'])
           if (roomsData[prop].roomName === "room"+roomsData.roomName){
             //Current room
             $scope.thisRoom = roomsData[prop];
+            $scope.roomImage = roomsData[prop].room_image;
           }
         }
       }
