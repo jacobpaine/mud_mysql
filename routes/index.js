@@ -6,13 +6,13 @@ var connection = mysql.createConnection({
   // props
   host:'localhost',
   user: 'root',
-  password: '',
+  password: 'thereare4lights',
   database: 'test_db'
 });
 
 connection.connect(function(err){
  if (!!err) {
-   console.log("Error!");
+   console.log("Error!", err);
   } else {
    console.log("Connected on Port 3000");
   }
@@ -29,8 +29,7 @@ router.get('/rooms', function(req, res){
       console.log("err", err);
     } else {
       res.status(200).json(rows);
-      // console.log("Query successful.");
-      // console.log("ROWS", rows[0]);
+      console.log("Query successful.");
     }
   });
 })
@@ -42,8 +41,7 @@ router.get('/room_actions', function(req, res){
       console.log("err", err);
     } else {
       res.status(200).json(rows);
-      // console.log("Query successful.");
-      // console.log("ROWS", rows[0]);
+      console.log("Query successful.");
     }
   });
 })

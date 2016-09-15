@@ -74,7 +74,7 @@
     <div ng-bind="selectedText" class="item-box-text">
     </div>
         <div class="playerControls">
-      <p>{{ gameMessage }}</p>
+      <p id="gameMessage">{{ gameMessage }}</p>
       <form method="POST" ng-submit="inputFunc(text)">
         <p>Enter text and hit enter:</p>
         <input id="primaryInputBox" type="text" ng-model="text" name="text" autofocus/>

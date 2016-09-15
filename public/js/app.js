@@ -121,6 +121,8 @@ angular.module("contactsApp", ['ngRoute'])
       document.getElementById("primaryInputBox").focus();
       // This receives all User's typed input
         $scope.inputFunc = function(text) {
+          text = text.toLowerCase();
+          console.log("this is text", text);
           var thisRoomNumber = $routeParams.roomId;
           for ( prop in roomsData ) {
             if (roomsData[prop].roomName === "room"+thisRoomNumber){
@@ -140,9 +142,6 @@ angular.module("contactsApp", ['ngRoute'])
               var eastValue = roomsData[prop].east;
               var westValue = roomsData[prop].west;
 
-              //Alternate keys for (var i = 0; i < array.length; i++) {
-              //   array[i]
-              // } same directions
               var northKey = (text === 'north' || text === 'n');
               var southKey = (text === 'south' || text === 's');
               var eastKey = (text === 'east' || text === 'e');
@@ -153,12 +152,13 @@ angular.module("contactsApp", ['ngRoute'])
                 $scope.gameMessage = "What are you trying to do?";
                 return;
               }
+// Parsing text commands
               var splitCmd = text.split(' ');
               var cmdKey = splitCmd[0];
               var prepositionsBlackList = "at" || "the" || "a"
               var objectKey;
-// Syntax handling for prepositions
-// For 'look at the bear', 'look at bear', & 'look bear'
+  // Syntax handling for prepositions
+  // For 'look at the bear', 'look at bear', & 'look bear'
               if (splitCmd.length > 1) {
                 if (splitCmd.length >= 4) {
                   objectKey = splitCmd[3];
@@ -190,32 +190,84 @@ angular.module("contactsApp", ['ngRoute'])
                 $location.path('rooms/' + newRoom);
                 return;
               } else if (text){
-                $.each(actionsData, function(index, value){
-                  // if (value.roomName === $scope.thisRoom.roomName && )
-
-                  console.log("index", index);
-                  console.log("value", value);
-
-                  console.log("cmdKey", cmdKey);
-                  console.log("objectKey", objectKey);
-                  console.log("value Object.keys", Object.keys(value));
-                  console.log("value Object.values", Object.values(value));
-
-                })
-                for (action in actionsData) {
-                  for (object in itemActions[action]){
-                    if (action === cmdKey && object === objectKey ){
-                        var dial = itemActions[action][object];
-                        flipSwitch(dial)
-                    }
+      // Matching text commands to room commands
+                console.log("text", text);
+                console.log("actionsData", actionsData);
+                // Iterate through every room's actions
+                var totalCmds = 0;
+                var totalInv = 0;
+                var badInvCount = 0;
+                var badCmdCount = 0;
+                $.each(actionsData, function(index, roomActions){
+                  //Amidst all rooms, finding this one's actions
+                  if (roomActions.roomName === $scope.thisRoom.roomName){
+                    totalInv++;
+                    console.log("totalInv", totalInv);
+                    //Parsing this room_actions cols
+                    $.each(Object.keys(roomActions), function(index, roomActionsCol) {
+                      totalCmds = Object.keys(roomActions).length;
+                      // Keys to be counted for all the rooms that don't work.
+                      if (cmdKey !=  roomActionsCol){
+                        console.log("roomActionsCol!!!!", roomActionsCol);
+                        badCmdCount++
+                        console.log("badCmdCount", badCmdCount);
+                        if (badCmdCount === totalCmds) {
+                          console.log("FIRED BAD");
+                          actOnWrongCmd(cmdKey, objectKey);
+                        }
+                      } if (cmdKey === roomActionsCol) {
+                        // If the obj in the room matches the obj input
+                        if(roomActions.inv === objectKey) {
+                          var response = roomActions[roomActionsCol];
+                          actOnObj(cmdKey, objectKey, response);
+                        } else if (roomActions.inv !== objectKey) {
+                          badInvCount++;
+                          if (badInvCount === totalInv) {
+                            console.log("BAD OBJ");
+                            actOnWrongObj(cmdKey, objectKey);
+                          }
+                        }
+                      }
+                    })
                   }
-                }
-              } else {
-                $scope.gameMessage = "You can't do that.";
-                document.getElementById("primaryInputBox").value=null;
-                return;
+                })
               }
-              //Actions available in the room
+
+            } else {
+              document.getElementById("primaryInputBox").value=null;
+              return;
+            }
+
+            function actOnObj(cmd, obj, res) {
+              $scope.gameMessage = res;
+              console.log("RIGHT!");
+              return;
+            }
+
+            function actOnWrongCmd(cmd, obj) {
+              if (cmd === undefined) {
+                $scope.gameMessage = cmd + " what?"
+              } else {
+                errMsg= cmd.charAt(0).toUpperCase();
+                cmd = cmd.slice(1);
+                cmd = errMsg + cmd;
+                console.log("WRONG", cmd);
+                $scope.gameMessage = cmd + " what?"
+              }
+              console.log("WrongCmd in wrongcmd", cmd);
+              console.log("WrongObj in wrongcmd", obj);
+              return;
+            }
+
+            function actOnWrongObj(cmd, obj) {
+              if (obj === undefined) {
+                $scope.gameMessage = "You're going to have to be more specific."
+              } else {
+                $scope.gameMessage = " I don't detect ..." + obj +"?"
+              }
+              return;
+            }
+            //Actions available in the room
 
 // Actions that update
 // var itemActions = roomsData[prop].itemActions;
@@ -237,5 +289,4 @@ angular.module("contactsApp", ['ngRoute'])
 
             }
           }
-        }
-      });
+        });
