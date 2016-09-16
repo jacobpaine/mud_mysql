@@ -2,26 +2,9 @@ var express = require("express");
 var app = express();
 var router = express.Router();
 var mysql = require('mysql');
-// local
-// var connection = mysql.createConnection({
-//   // props
-//   host:'localhost',
-//   user: 'root',
-//   password: 'thereare4lights',
-//   database: 'test_db'
-// });
+var connection = mysql.createConnection(process.env.JAWSDB_URL || 'mysql://root:thereare4lights@localhost/test_db');
 
-var mysql = require('mysql');
-var connection = mysql.createConnection(process.env.JAWSDB_URL);
 connection.connect();
-
-// var connection = mysql.createConnection({
-//   host     : process.env.DB_HOST || 'localhost',
-//   user     : process.env.DB_USER || 'root',
-//   password : process.env.DB_PASS || 'thereare4lights',
-//   database : process.env.DB_NAME || 'test_db'
-// }) || ;
-
 
 connection.connect(function(err){
  if (!!err) {

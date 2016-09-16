@@ -1,2 +1,2 @@
 # mud_mysql
-An attempt to use previous work in Node with a MySQL database
+A game environment to be  prototyped for use in Metro schools as a supplementary tool for forieign language classes (French, Mandarin).
