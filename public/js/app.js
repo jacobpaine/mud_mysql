@@ -75,7 +75,7 @@ angular.module("contactsApp", ['ngRoute'])
       $scope.room_num = room_num;
       $scope.actions = actionsData;
 
-// Scopes the current room
+// Scopes the current room's properties
       if (roomsData.roomName = $routeParams.roomId){
         for ( prop in roomsData ) {
           if (roomsData[prop].roomName === "room"+roomsData.roomName){
@@ -120,20 +120,28 @@ angular.module("contactsApp", ['ngRoute'])
 
 // Start primary Input box code (User's text input)
       document.getElementById("primaryInputBox").focus();
+
+      function movePlayer(num){
+        // This handles the player moving in normal XYZ coordinates.
+        console.log("number", number);
+      }
+
       // This receives all User's typed input
         $scope.inputFunc = function(text) {
+          // All input must be toLowerCase
           text = text.toLowerCase();
-          console.log("this is text", text);
+
+          // Error handling for blanks.
+          if (text === undefined){
+            text = " ";
+            $scope.gameMessage = "What are you trying to do?";
+            return;
+          }
+
           var thisRoomNumber = $routeParams.roomId;
           for ( prop in roomsData ) {
-            if (roomsData[prop].roomName === "room"+thisRoomNumber){
-              // This controls all available directions in the entire game.
-              // The grid is plus/minus 1 horizontal & plus/minus 10 vertical.
-              // The grid must change for wider than 20 rooms across.
-              // In other words, +100 or +1000 when moving north, etc.
-
-              // It also controls all the items in a room desc.
-              // Likely the directions will be thrown into arrays later.
+            // console.log("roomsData[prop].roomName", roomsData[prop].roomName);
+            // console.log("other", "room"+thisRoomNumber);
 
 
 //Actions
@@ -147,12 +155,7 @@ angular.module("contactsApp", ['ngRoute'])
               var southKey = (text === 'south' || text === 's');
               var eastKey = (text === 'east' || text === 'e');
               var westKey = (text === 'west' || text === 'w');
-// Error handling for blanks.
-              if (text === undefined){
-                text = " ";
-                $scope.gameMessage = "What are you trying to do?";
-                return;
-              }
+
 // Parsing text commands
               var splitCmd = text.split(' ');
               var cmdKey = splitCmd[0];
@@ -174,7 +177,6 @@ angular.module("contactsApp", ['ngRoute'])
               }
 // If the input matches a possible direction from the database
               if (northKey && northValue === 1){
-                console.log("North?");
                 var newRoom = (room_num + 10).toString();
                 $location.path('rooms/' + newRoom);
                 return;
@@ -192,52 +194,53 @@ angular.module("contactsApp", ['ngRoute'])
                 return;
               } else if (text){
       // Matching text commands to room commands
-                console.log("text", text);
-                console.log("actionsData", actionsData);
                 // Iterate through every room's actions
                 var totalCmds = 0;
                 var totalInv = 0;
                 var badInvCount = 0;
                 var badCmdCount = 0;
-                $.each(actionsData, function(index, roomActions){
-                  //Amidst all rooms, finding this one's actions
-                  if (roomActions.roomName === $scope.thisRoom.roomName){
-                    totalInv++;
-                    console.log("totalInv", totalInv);
-                    //Parsing this room_actions cols
-                    $.each(Object.keys(roomActions), function(index, roomActionsCol) {
-                      totalCmds = Object.keys(roomActions).length;
-                      // Keys to be counted for all the rooms that don't work.
-                      if (cmdKey !=  roomActionsCol){
-                        console.log("roomActionsCol!!!!", roomActionsCol);
-                        badCmdCount++
-                        console.log("badCmdCount", badCmdCount);
-                        if (badCmdCount === totalCmds) {
-                          console.log("FIRED BAD");
-                          actOnWrongCmd(cmdKey, objectKey);
-                        }
-                      } if (cmdKey === roomActionsCol) {
-                        // If the obj in the room matches the obj input
-                        if(roomActions.inv === objectKey) {
-                          var response = roomActions[roomActionsCol];
-                          actOnObj(cmdKey, objectKey, response);
-                        } else if (roomActions.inv !== objectKey) {
-                          badInvCount++;
-                          if (badInvCount === totalInv) {
-                            console.log("BAD OBJ");
-                            actOnWrongObj(cmdKey, objectKey);
-                          }
-                        }
-                      }
-                    })
-                  }
-                })
+                // $.each(actionsData, function(index, roomActions){
+                //   console.log("actionsData roomActions", roomActions);
+                //   //Amidst all rooms, finding this one's actions
+                //   if (roomActions.roomName === $scope.thisRoom.roomName){
+                //     totalInv++;
+                //     //Parsing this room_actions cols
+                //     console.log("Object.keys(roomActions)", Object.keys(roomActions));
+                //     $.each(Object.keys(roomActions), function(index, roomActionsCol) {
+                //
+                //       // console.log("roomActions", roomActions);
+                //       totalCmds = Object.keys(roomActions).length;
+                //       // // Keys to be counted for all the rooms that don't work.
+                //
+                //       if (cmdKey.match(roomActionsCol)){
+                //         console.log("match");
+                //         console.log("cmdKey", cmdKey);
+                //         console.log("roomActionsCol", roomActionsCol);
+                //       };
+                //
+                //       if (cmdKey === roomActionsCol) {
+                //         // If the obj in the room matches the obj input
+                //         if(roomActions.inv === objectKey) {
+                //           var response = roomActions[roomActionsCol];
+                //           actOnObj(cmdKey, objectKey, response);
+                //         } else if (roomActions.inv !== objectKey) {
+                //           badInvCount++;
+                //           if (badInvCount === totalInv) {
+                //             actOnWrongObj(cmdKey, objectKey);
+                //           }
+                //         }
+                //       } else if (cmdKey !== roomActionsCol){
+                //         badCmdCount++
+                //         if (badCmdCount === totalCmds) {
+                //           actOnWrongCmd(cmdKey, objectKey);
+                //         }
+                //       }
+                //     })
+                //   }
+                // })
               }
-
-            } else {
               document.getElementById("primaryInputBox").value=null;
-              return;
-            }
+
 
             function actOnObj(cmd, obj, res) {
               $scope.gameMessage = res;
@@ -246,6 +249,7 @@ angular.module("contactsApp", ['ngRoute'])
             }
 
             function actOnWrongCmd(cmd, obj) {
+              console.log("Wrong CMD count reached");
               if (cmd === undefined) {
                 $scope.gameMessage = cmd + " what?"
               } else {
@@ -261,6 +265,7 @@ angular.module("contactsApp", ['ngRoute'])
             }
 
             function actOnWrongObj(cmd, obj) {
+              console.log("Wrong Obj count reached");
               if (obj === undefined) {
                 $scope.gameMessage = "You're going to have to be more specific."
               } else {
@@ -268,26 +273,8 @@ angular.module("contactsApp", ['ngRoute'])
               }
               return;
             }
-            //Actions available in the room
-
-// Actions that update
-// var itemActions = roomsData[prop].itemActions;
-//
-// function flipSwitch(dial) {
-// $scope.gameMessage = dial.text;
-// dial.status = !dial.status
-// ////////////
-// // some kind of update function that sends the dial directly to the DB. ideally ONLY the boolean.
-// RoomsService.editRoom($scope.thisRoom);
-//
-// ////////////
-// }
-// //Actions that emote
-// console.log("$scopeActions", $scope.actions);
-// console.log("cmdKey", cmdKey);
-// console.log("objectKey", objectKey);
 
 
-            }
           }
-        });
+        }
+      });
